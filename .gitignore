@@ -1,0 +1,29 @@
+# Compiled class file
+*.class
+
+#package file
+*.war
+*.ear
+
+#idea
+.idea/
+/idea/
+*.ipr
+*.iml
+*.iws
+
+#eclipuce ignore
+.settings/
+.project
+.classpatch
+
+# temp file
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
+.DS_Store
+Thumbs.db
