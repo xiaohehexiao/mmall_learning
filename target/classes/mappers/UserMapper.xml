@@ -151,4 +151,18 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="checkUsername" resultType="int" parameterType="string">
+    SELECT  count(1) from mmall_user  WHERE  username=#{username}
+  </select>
+
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">  --需要返回一个对象结果集 ，使用resultMap 表示使用自定义封装的类型，resultType 代表使用容器封装的类型  parameterType:可以调用到java里面的内容，再次调用的是java.util.Map   parameterMap 这种是在SQL里面声明的一类对象
+    <include refid="Base_Column_List" />
+    FROM mmall_user
+    WHERE  username=#{username} and password=#{password}
+  </select>
+
+  <select id="checkEmail" resultType="int" parameterType="string">
+    SELECT  count(1) from mmall_user  WHERE  email=#{checkEmail}
+  </select>
 </mapper>
