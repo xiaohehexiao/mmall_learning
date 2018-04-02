@@ -63,12 +63,38 @@ public class UserController {
     	return iUserService.register(user);
 	}
 
-	@RequestMapping(value = "checkValid.do", method = RequestMethod.POST)  //限制只有POST请求能进来
+	/**
+	 *判断用户输入的是 emai 还是 用户名
+	 */
+	@RequestMapping(value = "checkValid.do", method = RequestMethod.GET)  //限制只有GET请求能进来
 	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
 	public ServerResponse<String> checkValid(String str,String type){
 		return iUserService.checkValid(str,type);
 	}
+
 	/**
+	 * 获取登录用户信息
 	 *
 	 */
+	@RequestMapping(value = "get_user_info.do", method = RequestMethod.GET)  //限制只有GET请求能进来
+	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
+	public  ServerResponse<User> getUserInfo(HttpSession session){
+
+		User user = (User) session.getAttribute(Const.CURRENT_USER);
+		if(user != null){
+			return ServerResponse.createBySuccess("获取成功",user);
+		}
+		return  ServerResponse.createByErrorMessage("登录失效,获取用户信息失败！");
+	}
+
+	@RequestMapping(value = "for_get_question.do", method = RequestMethod.POST)  //限制只有post请求能进来
+	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
+	public ServerResponse<String> forgetGetQus(String username){
+		 return  iUserService.selectQus(username);  //传入用户名查找此用户设置的重置支付密码问题
+	}
+
+	@RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
+	public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer){
+		return  iUserService.checkAnswer(username,question,answer);
+	}
 }

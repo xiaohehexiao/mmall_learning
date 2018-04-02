@@ -21,4 +21,8 @@ public interface UserMapper {
     User selectLogin(@Param("username") String username,@Param("password") String password);  //mybatis在传入多个参数时 需要使用注解让容器来区分使用那个参数值  在配置SQL的XML时，需要对应注解里面的命名
 
     int checkEmail(String email);
+
+    String selectQus(String username);
+
+    int checkAnswer(@Param("username")String username,@Param("question")String question,@Param("answer")String answer);
 }

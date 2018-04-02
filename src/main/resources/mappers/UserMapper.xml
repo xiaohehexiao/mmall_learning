@@ -165,4 +165,18 @@
   <select id="checkEmail" resultType="int" parameterType="string">
     SELECT  count(1) from mmall_user  WHERE  email=#{checkEmail}
   </select>
+  
+  <select id="selectQus" resultType="string" parameterType="string">
+    SELECT  question FROM mmall_user WHERE  username = #{username}
+  </select>
+  
+  <select id="checkAnswer" resultType="int" parameterType="map">  --mybatis多个参数需要使用 map来存储
+    SELECT
+     COUNT(1)
+      FROM mmall_user
+      WHERE
+            username=#{username}
+        and question =#{question}
+        and answer = #{answer}
+  </select>
 </mapper>

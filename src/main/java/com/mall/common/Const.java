@@ -5,8 +5,8 @@ package com.mall.common;
  */
 public class Const {
 	public static final String CURRENT_USER = "currentUser";            //当前用户
-	public  static  final  String USERNAME="username";  //用户名
-	public static  final  String EMAIL="email";  //邮箱
+	public  static  final  String USERNAME="username";  //用户名 类型
+	public static  final  String EMAIL="email";  //邮箱  类型
 
 
 	/**

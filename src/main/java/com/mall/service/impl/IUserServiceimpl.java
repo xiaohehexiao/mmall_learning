@@ -3,6 +3,7 @@ package com.mall.service.impl;
 import com.mall.common.Const;
 import com.mall.common.ResponseCode;
 import com.mall.common.ServerResponse;
+import com.mall.common.TokenCache;
 import com.mall.dao.UserMapper;
 import com.mall.pojo.User;
 import com.mall.service.IUserService;
@@ -10,6 +11,8 @@ import com.mall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * Created by hexiao on 2018/3/28.
@@ -46,6 +49,7 @@ public class IUserServiceimpl implements IUserService {
 	 * @param user
 	 * @return
 	 */
+	@Override
 	public  ServerResponse<User> register(User user){
 //		int resultCount = userMapper.checkUsername(user.getUsername());  //检查登录的用户名是否存在
 //		if( resultCount > 0){
@@ -80,7 +84,7 @@ public class IUserServiceimpl implements IUserService {
 		}
 		return  ServerResponse.createBySuccessMessage("注册成功！");
 	}
-
+	@Override
 	public ServerResponse<String> checkValid(String str,String type){
      	if (StringUtils.isNoneBlank(type)){
 			//开始校验
@@ -101,6 +105,29 @@ public class IUserServiceimpl implements IUserService {
             return  ServerResponse.createByErrorMessage("参数错误！");
 		}
 		return ServerResponse.createBySuccessMessage("校验成功！");
+	}
+	@Override
+	public ServerResponse<String> selectQus(String username){
+		ServerResponse vaildResponse = this.checkValid(username,Const.USERNAME);
+        if(!vaildResponse.isSuccess()){
+   			ServerResponse.createByErrorMessage("此用户名不存在！");
+		}
+       String SQues  = userMapper.selectQus(username);
+		if (StringUtils.isNotBlank(SQues)){
+			return  ServerResponse.createBySuccessMessage(SQues);
+		}
+		return ServerResponse.createByErrorMessage("此用户没有设置过支付密码问题！");
+	}
+
+	public ServerResponse<String> checkAnswer(String username,String question,String answer){
+		int checkCont = userMapper.checkAnswer(username,question,answer);
+		if(checkCont > 0){
+			//当前用户的 重置问题  答案都正确
+			String forgetToken = UUID.randomUUID().toString();  //生成一个字符串ID = bc95f546-2e8d-4557-8374-d6b69322a2c3
+			TokenCache.setKey("token_"+username,forgetToken);
+			return ServerResponse.createBySuccess(forgetToken);
+		}
+		return  ServerResponse.createByErrorMessage("密保问题错误！");
 	}
 
 }
