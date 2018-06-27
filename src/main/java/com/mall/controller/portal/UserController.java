@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.Response;
+import java.util.Set;
 
 /**
  * Created by hexiao on 2018/3/28.
@@ -87,14 +87,37 @@ public class UserController {
 		return  ServerResponse.createByErrorMessage("登录失效,获取用户信息失败！");
 	}
 
-	@RequestMapping(value = "for_get_question.do", method = RequestMethod.POST)  //限制只有post请求能进来
+	@RequestMapping(value = "forget_get_question.do", method = RequestMethod.POST)  //限制只有post请求能进来
 	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
 	public ServerResponse<String> forgetGetQus(String username){
 		 return  iUserService.selectQus(username);  //传入用户名查找此用户设置的重置支付密码问题
 	}
 
 	@RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
+	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
 	public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer){
 		return  iUserService.checkAnswer(username,question,answer);
+	}
+
+	/*
+* 未登录状态获取重置支付密码
+ */
+	@RequestMapping(value = "forget_reset_password.do",method = RequestMethod.GET)
+	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
+	public ServerResponse<String> forgetRestPassword(String username,String passwordNew,String forgetToken){
+		return iUserService.forgetRestPassword(username,passwordNew,forgetToken);
+	}
+
+	/*
+* 登录状态获取重置支付密码
+*/
+	@RequestMapping(value = "reset_password.do",method = RequestMethod.GET)
+	@ResponseBody   //此注解表示 数据在返回的时候自动通过springmvc 的 jackson的插件将我们的返回值序列化为json
+	public ServerResponse<String> forgetRestPassword(HttpSession session,String password,String passwordNew){
+		User user = (User) session.getAttribute(Const.CURRENT_USER);//获取当前用户的session
+		if (user == null){
+			ServerResponse.createByErrorMessage("用户未登录！");
+		}
+       return  iUserService.resetPassword(password,passwordNew,user);
 	}
 }

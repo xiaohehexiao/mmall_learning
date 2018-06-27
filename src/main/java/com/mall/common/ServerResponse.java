@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by hexiao on 2018/3/28.
  * Serializable 序列化接口
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) //json数据空时不返回
 //json数据为空的不返回，保证序列化json的时候，如果是nll的对象，key也会消失
 public class ServerResponse<T> implements Serializable{
 	private  int status;  //状态

@@ -2,8 +2,11 @@ package com.mall.dao;
 
 import com.mall.pojo.User;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.plugin.Interceptor;
 
 public interface UserMapper {
+    int checkUsername(String username);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
@@ -16,13 +19,15 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    int checkUsername(String username);  //检查用户是否存在
+    int checkAnswer(String username,String password,String answer);  //密保问题检测
 
-    User selectLogin(@Param("username") String username,@Param("password") String password);  //mybatis在传入多个参数时 需要使用注解让容器来区分使用那个参数值  在配置SQL的XML时，需要对应注解里面的命名
+    User selectLogin(@Param("username")String username,@Param("password")String password); //登录校验
 
-    int checkEmail(String email);
+    String selectQus(String username);  //重置密码用户是否有密保问题
 
-    String selectQus(String username);
+    int checkEmail(String email); //登录email检查
 
-    int checkAnswer(@Param("username")String username,@Param("question")String question,@Param("answer")String answer);
+    int updatePasswordByUsername(@Param("username")String username,@Param("passwordNew")String passwordNew); //未登录重置登录密码
+
+    int resetPassword(@Param("password")String password,@Param("userId")Integer userId); //登录后重置登录密码
 }

@@ -6,6 +6,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.slf4j.LoggerFactory;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TokenCache {
 	private  static org.slf4j.Logger logger = LoggerFactory.getLogger(TokenCache.class);  //生成一个静态Log对象
+	public static  final String TOKEN_PREFIX = "token_";
 
 	// 本地缓存流程，创建本地缓存>>CacheBuilder.newBuilder()，初始化本地缓存容量>>> inittialCapacity(1000),设置最大容量>>>maximumSize(10000)
 	//采用调用了方法,意思就是new后面的方法调用可以不管顺序   ，本地缓存超过最大容量之后采用  LRU算法  最少使用算法》》》根据在缓存里面使用量的多少来去除缓存数据，
